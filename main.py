@@ -28,7 +28,7 @@ def getMinuteSparse(minute):  # 将分钟转化为间隔编号
 
 def getData(num):  # 从表中读取用户名和密码
     try:
-        logData = pd.read_excel('logIn.xlsx', header=0, index_col=None)
+        logData = pd.read_csv('logIn.csv', header=0, index_col=None)
         _username = str(logData.loc[num]['username'])
         _password = str(logData.loc[num]['password'])
         log1.logger.info('用户名：' + _username + '    密码: ' + _password)
@@ -46,6 +46,7 @@ def getToken(SS):
             return True
     print('获取新token失败')
     log1.logger.error('获取新token失败')
+    exit(1)
     return False
 
 
@@ -93,7 +94,7 @@ if __name__ == '__main__':
     successRoom = 0
     buildingId = getBuildingId()
 
-    logData = pd.read_excel('logIn.xlsx')
+    logData = pd.read_csv('logIn.csv')
     length = len(logData.index)
 
     while True:

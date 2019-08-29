@@ -13,6 +13,19 @@ import os
 requests.packages.urllib3.disable_warnings()
 
 
+def get_proxies(ip_pool_name='ips_pool.csv'):
+    """
+    从ip池获得一个随机的代理ip
+    :param ip_pool_name: str,存放ip池的文件名,
+    :return: 返回一个proxies字典,形如:{'HTTPS': '106.12.7.54:8118'}
+    """
+    with open(ip_pool_name, 'r') as f:
+        datas = f.readlines()
+    ip = datas[0].strip().split(',')
+    proxies = {ip[0].lower(): ip[0].lower()+'://'+ip[1] + ':' + ip[2]}
+    return proxies
+
+
 class SeatScanner(object):
 
     def __init__(self, username='', password=''):
@@ -22,6 +35,7 @@ class SeatScanner(object):
         self.stats_url = 'https://seat.lib.whu.edu.cn:8443/rest/v2/room/stats2/'  # 单一分馆区域信息API（拼接buildingId）
         self.layout_url = 'https://seat.lib.whu.edu.cn:8443/rest/v2/room/layoutByDate/'  # 单一区域座位信息API（拼接roomId+date）
         self.search_url = 'https://seat.lib.whu.edu.cn:8443/rest/v2/searchSeats/'  # 空位检索API（拼接date+startTime+endTime）
+        self.proxy = get_proxies()
 
         # 已预先爬取的roomId
         self.xt = ('6', '7', '8', '9', '10', '11', '12', '16', '4', '5', '14', '15')
@@ -61,8 +75,9 @@ class SeatScanner(object):
         datas = {'username': self.username, 'password': self.password}
         # print('\nTry getting token...Status: ', end='')
         try:
-            response = requests.get(self.login_url, params=datas, headers=self.headers, verify=False, timeout=5)
-            # print(response.text)
+            response = requests.get(self.login_url, params=datas, headers=self.headers, verify=False, timeout=5, proxies=self.proxy)
+            print(response.text)
+            print(self.headers)
             json = response.json()
             if json['status'] == 'success':
                 self.token = json['data']['token']
@@ -70,10 +85,10 @@ class SeatScanner(object):
                 # print('token：' + json['data']['token'])
                 return json['data']['token']
             else:
-                # print(json['message'])
+                print(json['message'])
                 return False
         except:
-            # print('Connection lost')
+            print('Connection lost')
             return False
 
     # 发起GET请求，获取当前某区域内的位置信息
@@ -81,7 +96,7 @@ class SeatScanner(object):
         url = self.layout_url + roomId + '/' + date
         # print('\nTry getting seat information...Status: ', end='')
         try:
-            response = requests.get(url, headers=self.headers, verify=False, timeout=5)
+            response = requests.get(url, headers=self.headers, verify=False, timeout=5, proxies=self.proxy)
             json = response.json()
             print('room' + roomId + ' ' + json['status'])
             if json['status'] == 'success':

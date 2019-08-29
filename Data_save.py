@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 import pandas as pd
 
 
-important_data = pd.read_excel('logIn.xlsx')
+important_data = pd.read_csv('logIn.csv')
 
 
 class DataSaver(object):
