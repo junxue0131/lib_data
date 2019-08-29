@@ -39,14 +39,14 @@ def getData(num):  # 从表中读取用户名和密码
 
 
 def getToken(SS):
-    for _ in range(100):
+    for _ in range(50):
         if SS.GetToken():
             print('获取新token成功')
             log1.logger.info('获取新token成功')
             return True
     print('获取新token失败')
     log1.logger.error('获取新token失败')
-    exit(1)
+    exit(20)
     return False
 
 
@@ -134,6 +134,8 @@ if __name__ == '__main__':
             f.write('startTime:' + startTime.strftime("%Y-%m-%d %H:%M:%S") + ' allRoom:' + str(allRoom) +
                     ' successRoom:' + str(successRoom) + ' failRoom:' + str(allRoom - successRoom) + '\n')
 
+        if (allRoom - successRoom) / allRoom > 0.25:
+            exit(30)
         print(SS.seatData[:20])
 
         # 将所爬取的数据存入数据库

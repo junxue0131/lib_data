@@ -85,10 +85,10 @@ class SeatScanner(object):
                 # print('token：' + json['data']['token'])
                 return json['data']['token']
             else:
-                print(json['message'])
+                # print(json['message'])
                 return False
         except:
-            print('Connection lost')
+            # print('Connection lost')
             return False
 
     # 发起GET请求，获取当前某区域内的位置信息

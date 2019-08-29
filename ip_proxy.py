@@ -24,7 +24,8 @@ def spider(pages, max_change_porxies_times=300):
     urls = 'https://www.xicidaili.com/nn/{}'
     proxies = {}
     try_times = 0
-    for i in range(pages):
+    for i in range(100):
+        i = random.randint(1, 100)
         url = urls.format(i + 1)
         s.headers = {
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
@@ -134,8 +135,12 @@ def get_proxies(ip_pool_name='ips_pool.csv'):
 
 if __name__ == '__main__':
     t1 = time.time()
-    spider(pages=3400)
+    res = spider(pages=3400)
     t2 = time.time()
     print('抓取完毕,时间:', t2 - t1)
-
-    # check_local_ip('raw_ips.csv','http://www.baidu.com')
+    if res == True:
+        print('correct!!!')
+        exit(0)
+    else:
+        print('wrong!!!')
+        exit(10)
