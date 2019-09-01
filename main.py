@@ -9,7 +9,7 @@ import os
 
 auto = 1  # 标记：自动设置数据或命令行设置数据，1为自动
 
-log1 = Logger.Logger(filename='debug.log', level='warning')
+log1 = Logger.Logger(filename='log/debug.log', level='warning')
 
 
 def getMinuteSparse(minute):  # 将分钟转化为间隔编号
@@ -130,12 +130,14 @@ if __name__ == '__main__':
                 if SS.GetSeats(room, building, str(date), hour, minuteSparse, log1):
                     successRoom += 1
 
-        with open('temData.txt', 'a') as f:  # 将每次扫描结果写入临时文件
-            f.write('startTime:' + startTime.strftime("%Y-%m-%d %H:%M:%S") + ' allRoom:' + str(allRoom) +
-                    ' successRoom:' + str(successRoom) + ' failRoom:' + str(allRoom - successRoom) + '\n')
-
         if (allRoom - successRoom) / allRoom > 0.25:
             exit(30)
+
+        with open('log/temData' + startTime.strftime("%Y-%m-%d") + '.txt', 'a') as f:  # 将每次扫描结果写入临时文件、
+            f.write('startTime:' + startTime.strftime("%Y-%m-%d %H:%M:%S") + ' allRoom:' + str(allRoom) +
+                    ' successRoom:' + str(successRoom) + ' failRoom:' + str(allRoom - successRoom) + 
+                    ' failrate:' + str((allRoom - successRoom) / allRoom) + '\n')
+
         print(SS.seatData[:20])
 
         # 将所爬取的数据存入数据库

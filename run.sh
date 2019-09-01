@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd /home/xuejun/lib_data/
 cnt=0
 while true
 do
