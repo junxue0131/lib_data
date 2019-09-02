@@ -138,9 +138,8 @@ if __name__ == '__main__':
                     ' successRoom:' + str(successRoom) + ' failRoom:' + str(allRoom - successRoom) + 
                     ' failrate:' + str((allRoom - successRoom) / allRoom) + '\n')
 
-        print(SS.seatData[:20])
-
         # 将所爬取的数据存入数据库
+        print('本次数据爬取完成，存储数据至数据库...')
         DS = Data_save.DataSaver()
         DS.save(SS.seatData)
 

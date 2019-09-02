@@ -55,7 +55,7 @@ def spider(pages, max_change_porxies_times=300):
             host = tree.xpath(f'//table[@id="ip_list"]/tr[{j}]/td[2]/text()')[0]
             port = tree.xpath(f'//table[@id="ip_list"]/tr[{j}]/td[3]/text()')[0]
             if check_proxies(http, host, port):  # 检查提取的代理ip是否可用
-                print('Success!!!')
+                print('from ip_proxy:find correct ip!')
                 return True
             else:
                 continue
@@ -84,7 +84,7 @@ def check_proxies(http, host, port, test_url='https://seat.lib.whu.edu.cn:8443/r
                 f.write(','.join([http, host, port]) + '\n')
             return True
     except Exception as e:  # 检测不通过,就不保存,别让报错打断程序
-        print(e)
+        print(f'{proxies}检测不通过')
         return False
 
 
@@ -139,8 +139,6 @@ if __name__ == '__main__':
     t2 = time.time()
     print('抓取完毕,时间:', t2 - t1)
     if res == True:
-        print('correct!!!')
         exit(0)
     else:
-        print('wrong!!!')
         exit(10)
