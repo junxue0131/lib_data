@@ -56,7 +56,10 @@ def spider(pages, max_change_porxies_times=300):
             port = tree.xpath(f'//table[@id="ip_list"]/tr[{j}]/td[3]/text()')[0]
             if check_proxies(http, host, port):  # 检查提取的代理ip是否可用
                 print('from ip_proxy:find correct ip!')
-                return True
+                if j > 50:
+                    return True
+                else:
+                    continue
             else:
                 continue
 

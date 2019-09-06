@@ -63,17 +63,44 @@
 ## 更新进程
 * v1.0.0 beta 2019.8.16
 >爬虫和数据库存储功能基本完成
-* v1.1.0 2019.8.29
->修正服务器ip无法使用的问题，增加代理ip池，更改login excel文件为csv
-* v1.2.0
+* v1.1.0 beta 2019.8.29
+>修正服务器ip无法使用的问题
+>
+>增加代理ip池
+>
+>更改login excel文件为csv
+* v1.2.0 beta
 >添加监控和重启python脚本的的shell脚本
-* v1.2.1
->解决后台运行问题，代理按网站页数随机化选取，解决不能随时终止问题，修正log文件格式便于排错，优化程序文件目录，保持每天定时开启和关闭
-* v1.2.2
->适当修改调试信息输出形式，添加关闭进程脚本kill.sh，更新cron配置信息
+* v1.2.1 beta
+>解决后台运行问题
+>
+>代理按网站页数随机化选取
+>
+>解决不能随时终止问题
+>
+>修正log文件格式便于排错
+>
+>优化程序文件目录
+>
+>保持每天定时开启和关闭
+* v1.2.2 beta
+>适当修改调试信息输出形式
+>
+>添加关闭进程脚本kill.sh
+>
+>更新cron配置信息
+* v1.2.3 beta
+>此版本基本可以正常运行
+>
+>更新cron配置防止kill脚本可能的失效
+>
+>尝试解决ips_pool中ip过少的问题
 
 
 ## 待解决问题
+* ips_pool.csv运行一段时间之后就会变成一个ip
+* kill脚本有时候会失效
+* 添加邮件或短信通知
 * 整个脚本的异常检测和错误处理稍许混乱
 * debuglog分日期保存
 * 代理ip不够优质，总是被封
@@ -90,6 +117,8 @@
 >
 >5 8 * * * bash ~/lib_data/run.sh >> ~/run.log
 5 23 * * * bash ~/lib_data/kill.sh >> ~/kill.log
+6 23 * * *  ps aux|grep run.sh|grep -v grep|cut -c 9-15|xargs kill -15 >> ~/kill1.log
+6 23 * * * ps aux|grep python3|grep -v grep|cut -c 9-15|xargs kill -15 >> ~/kill1.log
 
 
 ## python脚本返回错误码一览
