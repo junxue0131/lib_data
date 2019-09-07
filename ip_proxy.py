@@ -122,7 +122,7 @@ def check_local_ip(fn, test_url):
             continue
 
 
-def get_proxies(ip_pool_name='ips_pool.csv'):
+def get_proxies(ip_pool_name='ips_pool_t.csv'):
     """
     从ip池获得一个随机的代理ip
     :param ip_pool_name: str,存放ip池的文件名,
