@@ -10,7 +10,7 @@ headers = {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                         'token': ''}
 
 
-def spider(pages, max_change_porxies_times=300):
+def spider(pages, max_change_porxies_times=300, target_url='https://seat.lib.whu.edu.cn:8443/rest/auth', file_name='ips_pool.csv'):
     """
     抓取 XiciDaili.com 的 http类型-代理ip-和端口号
     将所有抓取的ip存入 raw_ips.csv 待处理, 可用 check_proxies() 检查爬取到的代理ip是否可用
@@ -54,7 +54,7 @@ def spider(pages, max_change_porxies_times=300):
             http = tree.xpath(f'//table[@id="ip_list"]/tr[{j}]/td[6]/text()')[0]
             host = tree.xpath(f'//table[@id="ip_list"]/tr[{j}]/td[2]/text()')[0]
             port = tree.xpath(f'//table[@id="ip_list"]/tr[{j}]/td[3]/text()')[0]
-            if check_proxies(http, host, port):  # 检查提取的代理ip是否可用
+            if check_proxies(http, host, port, test_url=target_url, file_name=file_name):  # 检查提取的代理ip是否可用
                 print('from ip_proxy:find correct ip!')
                 if j > 50:
                     return True
@@ -64,7 +64,7 @@ def spider(pages, max_change_porxies_times=300):
                 continue
 
 
-def check_proxies(http, host, port, test_url='https://seat.lib.whu.edu.cn:8443/rest/auth'):
+def check_proxies(http, host, port, file_name, test_url='https://seat.lib.whu.edu.cn:8443/rest/auth'):
     """
     检测给定的ip信息是否可用
 
@@ -83,7 +83,7 @@ def check_proxies(http, host, port, test_url='https://seat.lib.whu.edu.cn:8443/r
         print(res.text)
         if res.status_code == 200:
             print(f'{proxies}检测通过')
-            with open('ips_pool.csv', 'w') as f:
+            with open(file_name, 'w') as f:
                 f.write(','.join([http, host, port]) + '\n')
             return True
     except Exception as e:  # 检测不通过,就不保存,别让报错打断程序
@@ -136,7 +136,13 @@ def get_proxies(ip_pool_name='ips_pool_t.csv'):
     return proxies
 
 
+def refresh_temp_ip():
+    spider(pages=3400, target_url='https://www.xicidaili.com/nn/', file_name='ips_pool_t.csv')
+
+
 if __name__ == '__main__':
+    if int(time.time()) % 5 == 0:
+        refresh_temp_ip()
     t1 = time.time()
     res = spider(pages=3400)
     t2 = time.time()
