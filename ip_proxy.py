@@ -83,8 +83,12 @@ def check_proxies(http, host, port, file_name, test_url='https://seat.lib.whu.ed
         print(res.text)
         if res.status_code == 200:
             print(f'{proxies}检测通过')
-            with open(file_name, 'w') as f:
-                f.write(','.join([http, host, port]) + '\n')
+            if file_name == 'ips_pool_t.csv':
+                with open('ips_pool_t.csv', 'a+') as f:
+                    f.write(','.join([http, host, port]) + '\n')
+            else:    
+                with open(file_name, 'w') as f:
+                    f.write(','.join([http, host, port]) + '\n')
             return True
     except Exception as e:  # 检测不通过,就不保存,别让报错打断程序
         print(f'{proxies}检测不通过')
@@ -137,6 +141,9 @@ def get_proxies(ip_pool_name='ips_pool_t.csv'):
 
 
 def refresh_temp_ip():
+    # 清空ips_pool_t.csv:
+    with open('ips_pool_t.csv', 'w') as f:
+        f.write('')
     spider(pages=3400, target_url='https://www.xicidaili.com/nn/', file_name='ips_pool_t.csv')
 
 
