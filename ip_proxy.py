@@ -2,6 +2,7 @@ import requests
 from lxml import etree
 from requests.packages import urllib3
 import random, time
+import os
 
 urllib3.disable_warnings()
 
@@ -145,6 +146,13 @@ def refresh_temp_ip():
     with open('ips_pool_t.csv', 'w') as f:
         f.write('')
     spider(pages=3400, target_url='https://www.xicidaili.com/nn/', file_name='ips_pool_t.csv')
+    # 校验ips_pool_t.csv是否为空,为空则继续进行
+    while os.path.getsize('ips_pool_t.csv') == 0:
+        with open('ips_pool_t.csv', 'w') as f:
+            f.write('')
+        spider(pages=3400, target_url='https://www.xicidaili.com/nn/', file_name='ips_pool_t.csv')
+    
+
 
 
 if __name__ == '__main__':
