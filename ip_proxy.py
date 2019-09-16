@@ -51,13 +51,15 @@ def spider(pages, max_change_porxies_times=300, target_url='https://seat.lib.whu
 
         print(f'正在抓取第{i+1}页数据,共{pages}页')
         for j in range(2, 102):  # 用简单的xpath提取http,host和port
+            cnt = 0
             tree = etree.HTML(content.text)
             http = tree.xpath(f'//table[@id="ip_list"]/tr[{j}]/td[6]/text()')[0]
             host = tree.xpath(f'//table[@id="ip_list"]/tr[{j}]/td[2]/text()')[0]
             port = tree.xpath(f'//table[@id="ip_list"]/tr[{j}]/td[3]/text()')[0]
             if check_proxies(http, host, port, test_url=target_url, file_name=file_name):  # 检查提取的代理ip是否可用
                 print('from ip_proxy:find correct ip!')
-                if j > 50:
+                cnt += 1
+                if cnt > 20:
                     return True
                 else:
                     continue
