@@ -39,7 +39,10 @@ def spider(pages, max_change_porxies_times=300, target_url='https://seat.lib.whu
             content = s.get(url, headers=s.headers, proxies=proxies)
             time.sleep(random.uniform(1.5, 4))  # 每读取一次页面暂停一会,否则会被封
             if content.status_code == 503:  # 如果503则ip被封,就更换ip
-                proxies = get_proxies()
+                if target_url == 'https://www.xicidaili.com/nn/' and file_name == 'ips_pool_t.csv':
+                    proxies = get_proxies('static_ips.csv')    
+                else:
+                    proxies = get_proxies()
                 try_times += 1
                 print(f'第{str(try_times):0>3s}次变更,当前{proxies}')
                 if try_times > max_change_porxies_times:
