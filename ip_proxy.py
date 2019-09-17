@@ -53,8 +53,8 @@ def spider(pages, max_change_porxies_times=300, target_url='https://seat.lib.whu
                 break  # 如果返回码是200 ,就跳出while循环,对爬取的页面进行处理
 
         print(f'正在抓取第{i+1}页数据,共{pages}页')
+        cnt = 0
         for j in range(2, 102):  # 用简单的xpath提取http,host和port
-            cnt = 0
             tree = etree.HTML(content.text)
             http = tree.xpath(f'//table[@id="ip_list"]/tr[{j}]/td[6]/text()')[0]
             host = tree.xpath(f'//table[@id="ip_list"]/tr[{j}]/td[2]/text()')[0]
