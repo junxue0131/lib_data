@@ -36,6 +36,7 @@ def try_spider(url, proxy):
         return False
 
     if content.status_code == 200:
+        print('尝试成功！')
         return True
     else:
         return False
@@ -147,13 +148,13 @@ def fresh_proxy():
         # 失败次数过多
         if fail_cnt > 25:
             print('二级代理刷新失败，请手动更新static_ips.csv!')
-            break
+            return False
         # 常规爬取西刺网ip
         res = try_spider(PORXY_URL, proxy)
         if res:
             res = proxy_spider()
             print('ips_pool更新完成!')
-            continue
+            return True
         else:
             fail_cnt += 1
             continue
@@ -162,21 +163,27 @@ def fresh_proxy():
 if __name__ == '__main__':
     res = False
     fail_cnt = 0
+    print('start finding proxy_ip...')
 
     while not res:
         fail_cnt += 1
         # 失败次数过多，更换ips_pool内代理
         if fail_cnt > 20:
-            print('失败次数过多，更换ips_pool内代理！')
-            fresh_proxy()
+            print('失败次数过多，start更换ips_pool内代理！')
+            if not fresh_proxy():
+                exit(10)
 
         # 常规爬取
+        print('start spider normally...')
         proxy, proxy_list = get_proxy('ips_pool.csv')
         res = try_spider(TARGET_URL, proxy)
         if not res:
+            print('fail!The time is:'+str(fail_cnt))
             fail_cnt += 1
             continue
         else:
+            print('保存可访问的代理ip...')
             res = set_ip(proxy_list)
             continue
     print('成功获取可访问目标网站的代理ip!')
+    exit(0)
