@@ -13,9 +13,9 @@ import os
 requests.packages.urllib3.disable_warnings()
 
 
-def get_proxies(ip_pool_name='ips_pool.csv'):
+def get_proxies(ip_pool_name='success_ip.csv'):
     """
-    从ip池获得一个随机的代理ip
+    从尝试成功的ip池获得一个代理ip
     :param ip_pool_name: str,存放ip池的文件名,
     :return: 返回一个proxies字典,形如:{'HTTPS': '106.12.7.54:8118'}
     """

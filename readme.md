@@ -94,6 +94,8 @@
 >更新cron配置防止kill脚本可能的失效
 >
 >尝试解决ips_pool中ip过少的问题
+* v1.3.0
+>重构ip_proxy.py，力图减少bug
 
 
 ## 待解决问题
